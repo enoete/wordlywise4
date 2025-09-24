@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚢 Lesson 4 Vocabulary Test - Interactive Adventure!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 4px solid #ff6b9d;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ff6b9d, #c44569, #f8b500, #00d2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .header p {
+            font-size: 1.4em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .progress-container {
+            background: #e0e0e0;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+            border: 3px solid #ff6b9d;
+        }
+
+        .progress-bar {
+            background: linear-gradient(45deg, #ff6b9d, #c44569, #f8b500);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 15px;
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        .navigation {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            border: 3px solid #ff6b9d;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #f8b500, #feca57);
+            transform: scale(1.1);
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1.1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            display: none;
+            border: 4px solid #ff6b9d;
+        }
+
+        .section.active {
+            display: block;
+            animation: slideIn 0.6s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section h2 {
+            color: #c44569;
+            margin-bottom: 25px;
+            font-size: 2.8em;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .question-container {
+            background: white;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border: 3px solid #00b894;
+        }
+
+        .question-number {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .option-group:hover {
+            background: #e9ecef;
+            border-color: #ff6b9d;
+        }
+
+        .sentence-input {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+
+        .sentence-input:focus {
+            border-color: #ff6b9d;
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 107, 157, 0.3);
+        }
+
+        .multiple-choice {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .choice-option {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .choice-option:hover {
+            background: #e9ecef;
+            transform: scale(1.02);
+        }
+
+        .choice-option.selected {
+            border-color: #ff6b9d;
+            background: #ffeef7;
+        }
+
+        .choice-option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .choice-option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .word-replacement {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 3px solid #ffc107;
+        }
+
+        .bold-phrase {
+            background: #ff6b9d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: line-through;
+            margin: 0 5px;
+        }
+
+        .replacement-input {
+            background: #e8f5e8;
+            border: 3px solid #28a745;
+            padding: 8px 15px;
+            border-radius: 8px;
+            margin: 0 5px;
+            font-weight: bold;
+            color: #155724;
+        }
+
+        .synonym-antonym {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 3px solid #2196f3;
+        }
+
+        .word-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 15px 0;
+            align-items: center;
+        }
+
+        .word-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .word-item:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .word-item.selected {
+            border-color: #ff6b9d;
+            background: #ffeef7;
+        }
+
+        .sa-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .sa-btn {
+            background: linear-gradient(45deg, #fd79a8, #fdcb6e);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .sa-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .sa-btn.selected {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+        }
+
+        .passage-container {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 35px;
+            border-radius: 20px;
+            margin: 25px 0;
+            border: 4px solid #e17055;
+        }
+
+        .passage-text {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            line-height: 1.8;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .passage-question {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            border: 3px solid #e17055;
+        }
+
+        .vocab-highlight {
+            background: #ff6b9d;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .fun-fact-box {
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 25px 0;
+            border-left: 8px solid #00b894;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .fun-fact-box h3 {
+            color: #00695c;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn.secondary {
+            background: linear-gradient(45deg, #fd79a8, #fdcb6e);
+        }
+
+        .results-container {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 25px 0;
+            border: 4px solid #e17055;
+            text-align: center;
+            display: none;
+        }
+
+        .stars {
+            font-size: 4em;
+            margin: 25px 0;
+            animation: twinkle 1s ease infinite alternate;
+        }
+
+        @keyframes twinkle {
+            from { opacity: 0.5; transform: scale(1); }
+            to { opacity: 1; transform: scale(1.2); }
+        }
+
+        .score-display {
+            font-size: 2.5em;
+            color: #d63031;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .word-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚢 Lesson 4 Vocabulary Test</h1>
+            <p>Set sail on an adventure with words! Test your vocabulary knowledge! ⚓🌊</p>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p id="progressText">Progress: 0% Complete</p>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showSection('intro')">🌟 Instructions</button>
+            <button class="nav-btn" onclick="showSection('sectionA')">📝 A: Finding Meanings</button>
+            <button class="nav-btn" onclick="showSection('sectionB')">✏️ B: Just the Right Word</button>
+            <button class="nav-btn" onclick="showSection('sectionC')">🎯 C: Applying Meanings</button>
+            <button class="nav-btn" onclick="showSection('sectionD')">🔄 D: Word Study</button>
+            <button class="nav-btn" onclick="showSection('sectionE')">📖 E: Passage</button>
+            <button class="nav-btn" onclick="showSection('results')">🏆 Results</button>
+        </div>
+
+        <!-- Instructions Section -->
+        <div id="intro" class="section active">
+            <h2>🌟 Welcome to Your Vocabulary Adventure!</h2>
+            
+            <div class="fun-fact-box">
+                <h3>🚢 Get Ready to Set Sail!</h3>
+                <p>You're about to embark on an exciting vocabulary journey! This test covers all the amazing words from Lesson 4. Each section tests your knowledge in a different way, just like different parts of a ship have different jobs!</p>
+            </div>
+
+            <div class="question-container">
+                <h3>📚 Your Lesson 4 Vocabulary Words:</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>accurate</strong><br>
+                        <em>correct, exact</em>
+                    </div>
+                    <div style="background: #f3e5f5; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>approximate</strong><br>
+                        <em>close to correct</em>
+                    </div>
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>course</strong><br>
+                        <em>path, direction</em>
+                    </div>
+                    <div style="background: #fff3e0; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>depart</strong><br>
+                        <em>to leave</em>
+                    </div>
+                    <div style="background: #fce4ec; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>despair</strong><br>
+                        <em>lose hope</em>
+                    </div>
+                    <div style="background: #e0f2f1; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>destination</strong><br>
+                        <em>where you're going</em>
+                    </div>
+                    <div style="background: #f1f8e9; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>deteriorate</strong><br>
+                        <em>get worse</em>
+                    </div>
+                    <div style="background: #e8eaf6; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>gale</strong><br>
+                        <em>strong wind</em>
+                    </div>
+                    <div style="background: #fff8e1; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>horizon</strong><br>
+                        <em>where sky meets land</em>
+                    </div>
+                    <div style="background: #f9fbe7; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>jubilation</strong><br>
+                        <em>great joy</em>
+                    </div>
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>navigate</strong><br>
+                        <em>find direction</em>
+                    </div>
+                    <div style="background: #f3e5f5; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>nostalgia</strong><br>
+                        <em>longing for the past</em>
+                    </div>
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>revive</strong><br>
+                        <em>bring back to life</em>
+                    </div>
+                    <div style="background: #fff3e0; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>sever</strong><br>
+                        <em>cut off</em>
+                    </div>
+                    <div style="background: #fce4ec; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>voyage</strong><br>
+                        <em>long journey</em>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="showSection('sectionA')" style="font-size: 20px; padding: 20px 40px;">
+                    🚀 Start Your Vocabulary Adventure!
+                </button>
+            </div>
+        </div>
+
+        <!-- Section A: Finding Meanings -->
+        <div id="sectionA" class="section">
+            <h2>📝 Section A: Finding Meanings</h2>
+            
+            <div class="fun-fact-box">
+                <h3>🎯 Instructions</h3>
+                <p>Choose two phrases to form a sentence that correctly uses a word from Word List 4. Write each sentence in the space provided.</p>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 1</div>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <strong>(a)</strong> get worse.<br>
+                        <strong>(b)</strong> To deteriorate is to
+                    </div>
+                    <div class="option-group">
+                        <strong>(c)</strong> To revive is to<br>
+                        <strong>(d)</strong> feel slightly uneasy.
+                    </div>
+                </div>
+                <input type="text" class="sentence-input" placeholder="Write your complete sentence here..." data-answer="To deteriorate is to get worse.">
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 2</div>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <strong>(a)</strong> An accurate account is<br>
+                        <strong>(b)</strong> one that is obscure.
+                    </div>
+                    <div class="option-group">
+                        <strong>(c)</strong> A jubilant account is<br>
+                        <strong>(d)</strong> one that is without errors.
+                    </div>
+                </div>
+                <input type="text" class="sentence-input" placeholder="Write your complete sentence here..." data-answer="An accurate account is one that is without errors.">
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 3</div>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <strong>(a)</strong> make it strong again.<br>
+                        <strong>(b)</strong> To sever a friendship is to
+                    </div>
+                    <div class="option-group">
+                        <strong>(c)</strong> To revive a friendship is to<br>
+                        <strong>(d)</strong> look back on it with fond memories.
+                    </div>
+                </div>
+                <input type="text" class="sentence-input" placeholder="Write your complete sentence here..." data-answer="To revive a friendship is to make it strong again.">
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 4</div>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <strong>(a)</strong> A destination is<br>
+                        <strong>(b)</strong> A course is
+                    </div>
+                    <div class="option-group">
+                        <strong>(c)</strong> a setting out from a place.<br>
+                        <strong>(d)</strong> the path over which something moves.
+                    </div>
+                </div>
+                <input type="text" class="sentence-input" placeholder="Write your complete sentence here..." data-answer="A course is the path over which something moves.">
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 5</div>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <strong>(a)</strong> Something that is horizontal<br>
+                        <strong>(b)</strong> is not exact.
+                    </div>
+                    <div class="option-group">
+                        <strong>(c)</strong> is falling into a state of disrepair.<br>
+                        <strong>(d)</strong> Something that is approximate
+                    </div>
+                </div>
+                <input type="text" class="sentence-input" placeholder="Write your complete sentence here..." data-answer="Something that is approximate is not exact.">
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 6</div>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <strong>(a)</strong> the act of leaving.<br>
+                        <strong>(b)</strong> A departure is
+                    </div>
+                    <div class="option-group">
+                        <strong>(c)</strong> A destination is<br>
+                        <strong>(d)</strong> a long journey by sea.
+                    </div>
+                </div>
+                <input type="text" class="sentence-input" placeholder="Write your complete sentence here..." data-answer="A departure is the act of leaving.">
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 7</div>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <strong>(a)</strong> a lack of understanding.<br>
+                        <strong>(b)</strong> a feeling of longing for the past.
+                    </div>
+                    <div class="option-group">
+                        <strong>(c)</strong> Nostalgia is<br>
+                        <strong>(d)</strong> Despair is
+                    </div>
+                </div>
+                <input type="text" class="sentence-input" placeholder="Write your complete sentence here..." data-answer="Nostalgia is a feeling of longing for the past.">
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 8</div>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <strong>(a)</strong> A voyage is<br>
+                        <strong>(b)</strong> a small boat.
+                    </div>
+                    <div class="option-group">
+                        <strong>(c)</strong> a strong wind.<br>
+                        <strong>(d)</strong> A gale is
+                    </div>
+                </div>
+                <input type="text" class="sentence-input" placeholder="Write your complete sentence here..." data-answer="A gale is a strong wind.">
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 9</div>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <strong>(a)</strong> Jubilation is<br>
+                        <strong>(b)</strong> Navigation is
+                    </div>
+                    <div class="option-group">
+                        <strong>(c)</strong> the directing of a ship's movement.<br>
+                        <strong>(d)</strong> the length of time something lasts.
+                    </div>
+                </div>
+                <input type="text" class="sentence-input" placeholder="Write your complete sentence here..." data-answer="Navigation is the directing of a ship's movement.">
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 10</div>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <strong>(a)</strong> To despair is to<br>
+                        <strong>(b)</strong> To voyage is to
+                    </div>
+                    <div class="option-group">
+                        <strong>(c)</strong> return to one's starting point.<br>
+                        <strong>(d)</strong> feel a sense of hopelessness.
+                    </div>
+                </div>
+                <input type="text" class="sentence-input" placeholder="Write your complete sentence here..." data-answer="To despair is to feel a sense of hopelessness.">
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="checkSectionA()">✅ Check My Answers</button>
+                <button class="btn secondary" onclick="showSection('sectionB')">➡️ Next: Section B</button>
+            </div>
+        </div>
+
+        <!-- Section B: Just the Right Word -->
+        <div id="sectionB" class="section">
+            <h2>✏️ Section B: Just the Right Word</h2>
+            
+            <div class="fun-fact-box">
+                <h3>🎯 Instructions</h3>
+                <p>Improve each sentence by crossing out the bold phrase and replacing it with a word (or form of the word) from Word List 4.</p>
+            </div>
+
+            <div class="word-replacement">
+                <div class="question-number">Question 1</div>
+                <p>The <span class="bold-phrase">loud outbursts</span> of laughter from the next room distracted me from my work.</p>
+                <input type="text" class="replacement-input" placeholder="Replace with..." data-answer="gales">
+            </div>
+
+            <div class="word-replacement">
+                <div class="question-number">Question 2</div>
+                <p>I will be responsible for <span class="bold-phrase">working out the direction the boat should be headed</span> when we sail to Bali.</p>
+                <input type="text" class="replacement-input" placeholder="Replace with..." data-answer="navigating">
+            </div>
+
+            <div class="word-replacement">
+                <div class="question-number">Question 3</div>
+                <p>The <span class="bold-phrase">place to which it is going</span> is shown on the front of the bus.</p>
+                <input type="text" class="replacement-input" placeholder="Replace with..." data-answer="destination">
+            </div>
+
+            <div class="word-replacement">
+                <div class="question-number">Question 4</div>
+                <p>We <span class="bold-phrase">start on our journey</span> at ten o'clock tomorrow morning.</p>
+                <input type="text" class="replacement-input" placeholder="Replace with..." data-answer="depart">
+            </div>
+
+            <div class="word-replacement">
+                <div class="question-number">Question 5</div>
+                <p>The ship met with stormy weather during the <span class="bold-phrase">long journey by sea</span> around Cape Horn.</p>
+                <input type="text" class="replacement-input" placeholder="Replace with..." data-answer="voyage">
+            </div>
+
+            <div class="word-replacement">
+                <div class="question-number">Question 6</div>
+                <p>Early this morning the <span class="bold-phrase">apparent line where the sky and sea meet</span> was obscured by the fog.</p>
+                <input type="text" class="replacement-input" placeholder="Replace with..." data-answer="horizon">
+            </div>
+
+            <div class="word-replacement">
+                <div class="question-number">Question 7</div>
+                <p>When the driver told me that the bus ride to Boston would take two hours, my friend said that was <span class="bold-phrase">close enough to be almost correct</span>.</p>
+                <input type="text" class="replacement-input" placeholder="Replace with..." data-answer="approximate">
+            </div>
+
+            <div class="word-replacement">
+                <div class="question-number">Question 8</div>
+                <p>Each <span class="bold-phrase">set of subjects to be studied</span> takes one year to complete.</p>
+                <input type="text" class="replacement-input" placeholder="Replace with..." data-answer="course">
+            </div>
+
+            <div class="word-replacement">
+                <div class="question-number">Question 9</div>
+                <p>I <span class="bold-phrase">completely broke off</span> my relationship with the company when I got a new job.</p>
+                <input type="text" class="replacement-input" placeholder="Replace with..." data-answer="severed">
+            </div>
+
+            <div class="word-replacement">
+                <div class="question-number">Question 10</div>
+                <p>Nina and her best friend were <span class="bold-phrase">filled with joy</span> when they were assigned to the same tent.</p>
+                <input type="text" class="replacement-input" placeholder="Replace with..." data-answer="jubilant">
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="checkSectionB()">✅ Check My Answers</button>
+                <button class="btn secondary" onclick="showSection('sectionC')">➡️ Next: Section C</button>
+            </div>
+        </div>
+
+        <!-- Section C: Applying Meanings -->
+        <div id="sectionC" class="section">
+            <h2>🎯 Section C: Applying Meanings</h2>
+            
+            <div class="fun-fact-box">
+                <h3>🎯 Instructions</h3>
+                <p>Circle the letter or letters of each correct answer. A question may have more than one correct answer.</p>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 1</div>
+                <p><strong>Which of the following can depart?</strong></p>
+                <div class="multiple-choice">
+                    <div class="choice-option" onclick="selectChoice(this, 'c1', ['a', 'b'])" data-value="a">(a) a train</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c1', ['a', 'b'])" data-value="b">(b) a ship</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c1', ['a', 'b'])" data-value="c">(c) a guest</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c1', ['a', 'b'])" data-value="d">(d) a noise</div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 2</div>
+                <p><strong>Which of the following could you sever?</strong></p>
+                <div class="multiple-choice">
+                    <div class="choice-option" onclick="selectChoice(this, 'c2', ['a', 'c'])" data-value="a">(a) a branch of a tree</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c2', ['a', 'c'])" data-value="b">(b) a puff of smoke</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c2', ['a', 'c'])" data-value="c">(c) a relationship</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c2', ['a', 'c'])" data-value="d">(d) a finger</div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 3</div>
+                <p><strong>Which of the following could be a destination?</strong></p>
+                <div class="multiple-choice">
+                    <div class="choice-option" onclick="selectChoice(this, 'c3', ['a', 'd'])" data-value="a">(a) a town in the Midwest</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c3', ['a', 'd'])" data-value="b">(b) a friendship</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c3', ['a', 'd'])" data-value="c">(c) next Tuesday</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c3', ['a', 'd'])" data-value="d">(d) Hollywood</div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 4</div>
+                <p><strong>Which of the following is a course?</strong></p>
+                <div class="multiple-choice">
+                    <div class="choice-option" onclick="selectChoice(this, 'c4', ['a', 'c'])" data-value="a">(a) the earth's path around the sun</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c4', ['a', 'c'])" data-value="b">(b) taking a wait-and-see attitude</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c4', ['a', 'c'])" data-value="c">(c) "Introduction to Science"</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c4', ['a', 'c'])" data-value="d">(d) the start of a race</div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 5</div>
+                <p><strong>On which of the following might you voyage?</strong></p>
+                <div class="multiple-choice">
+                    <div class="choice-option" onclick="selectChoice(this, 'c5', ['a', 'b'])" data-value="a">(a) an ocean liner</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c5', ['a', 'b'])" data-value="b">(b) the space shuttle</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c5', ['a', 'b'])" data-value="c">(c) a rowboat</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c5', ['a', 'b'])" data-value="d">(d) a helicopter</div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 6</div>
+                <p><strong>Which of the following might make a person feel nostalgic?</strong></p>
+                <div class="multiple-choice">
+                    <div class="choice-option" onclick="selectChoice(this, 'c6', ['c', 'd'])" data-value="a">(a) thinking about the past</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c6', ['c', 'd'])" data-value="b">(b) making plans for the future</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c6', ['c', 'd'])" data-value="c">(c) looking at old photographs</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c6', ['c', 'd'])" data-value="d">(d) meeting an old friend</div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 7</div>
+                <p><strong>Which of the following can be accurate?</strong></p>
+                <div class="multiple-choice">
+                    <div class="choice-option" onclick="selectChoice(this, 'c7', ['a', 'b', 'c'])" data-value="a">(a) a clock</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c7', ['a', 'b', 'c'])" data-value="b">(b) a statement</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c7', ['a', 'b', 'c'])" data-value="c">(c) a drawing</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c7', ['a', 'b', 'c'])" data-value="d">(d) a weather forecast</div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number">Question 8</div>
+                <p><strong>Which of the following can be navigated?</strong></p>
+                <div class="multiple-choice">
+                    <div class="choice-option" onclick="selectChoice(this, 'c8', ['a', 'b', 'd'])" data-value="a">(a) a spaceship</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c8', ['a', 'b', 'd'])" data-value="b">(b) an airplane</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c8', ['a', 'b', 'd'])" data-value="c">(c) a train</div>
+                    <div class="choice-option" onclick="selectChoice(this, 'c8', ['a', 'b', 'd'])" data-value="d">(d) a boat</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="checkSectionC()">✅ Check My Answers</button>
+                <button class="btn secondary" onclick="showSection('sectionD')">➡️ Next: Section D</button>
+            </div>
+        </div>
+
+        <!-- Section D: Word Study -->
+        <div id="sectionD" class="section">
+            <h2>🔄 Section D: Word Study</h2>
+            
+            <div class="fun-fact-box">
+                <h3>🎯 Instructions</h3>
+                <p>Each group of four words contains either two synonyms or two antonyms. Circle that pair. Then write S if they are synonyms or A if they are antonyms.</p>
+            </div>
+
+            <div class="synonym-antonym">
+                <div class="question-number">Question 1</div>
+                <div class="word-group">
+                    <div class="word-item" onclick="selectWord(this, 'q1')" data-word="cluster">cluster</div>
+                    <div class="word-item" onclick="selectWord(this, 'q1')" data-word="navigate">navigate</div>
+                    <div class="word-item" onclick="selectWord(this, 'q1')" data-word="deteriorate">deteriorate</div>
+                    <div class="word-item" onclick="selectWord(this, 'q1')" data-word="improve">improve</div>
+                </div>
+                <div class="sa-buttons">
+                    <button class="sa-btn" onclick="selectSA(this, 'q1', 'A')" data-answer="A">A (Antonyms)</button>
+                    <button class="sa-btn" onclick="selectSA(this, 'q1', 'S')" data-answer="S">S (Synonyms)</button>
+                </div>
+                <p><em>Correct pair: deteriorate & improve (opposites)</em></p>
+            </div>
+
+            <div class="synonym-antonym">
+                <div class="question-number">Question 2</div>
+                <div class="word-group">
+                    <div class="word-item" onclick="selectWord(this, 'q2')" data-word="nostalgia">nostalgia</div>
+                    <div class="word-item" onclick="selectWord(this, 'q2')" data-word="distraction">distraction</div>
+                    <div class="word-item" onclick="selectWord(this, 'q2')" data-word="jubilation">jubilation</div>
+                    <div class="word-item" onclick="selectWord(this, 'q2')" data-word="joy">joy</div>
+                </div>
+                <div class="sa-buttons">
+                    <button class="sa-btn" onclick="selectSA(this, 'q2', 'S')" data-answer="S">S (Synonyms)</button>
+                    <button class="sa-btn" onclick="selectSA(this, 'q2', 'A')" data-answer="A">A (Antonyms)</button>
+                </div>
+                <p><em>Correct pair: jubilation & joy (same meaning)</em></p>
+            </div>
+
+            <div class="synonym-antonym">
+                <div class="question-number">Question 3</div>
+                <div class="word-group">
+                    <div class="word-item" onclick="selectWord(this, 'q3')" data-word="obvious">obvious</div>
+                    <div class="word-item" onclick="selectWord(this, 'q3')" data-word="evident">evident</div>
+                    <div class="word-item" onclick="selectWord(this, 'q3')" data-word="equivalent">equivalent</div>
+                    <div class="word-item" onclick="selectWord(this, 'q3')" data-word="extinct">extinct</div>
+                </div>
+                <div class="sa-buttons">
+                    <button class="sa-btn" onclick="selectSA(this, 'q3', 'S')" data-answer="S">S (Synonyms)</button>
+                    <button class="sa-btn" onclick="selectSA(this, 'q3', 'A')" data-answer="A">A (Antonyms)</button>
+                </div>
+                <p><em>Correct pair: obvious & evident (same meaning)</em></p>
+            </div>
+
+            <div class="synonym-antonym">
+                <div class="question-number">Question 4</div>
+                <div class="word-group">
+                    <div class="word-item" onclick="selectWord(this, 'q4')" data-word="depart">depart</div>
+                    <div class="word-item" onclick="selectWord(this, 'q4')" data-word="cultivate">cultivate</div>
+                    <div class="word-item" onclick="selectWord(this, 'q4')" data-word="arrive">arrive</div>
+                    <div class="word-item" onclick="selectWord(this, 'q4')" data-word="retire">retire</div>
+                </div>
+                <div class="sa-buttons">
+                    <button class="sa-btn" onclick="selectSA(this, 'q4', 'A')" data-answer="A">A (Antonyms)</button>
+                    <button class="sa-btn" onclick="selectSA(this, 'q4', 'S')" data-answer="S">S (Synonyms)</button>
+                </div>
+                <p><em>Correct pair: depart & arrive (opposites)</em></p>
+            </div>
+
+            <div class="synonym-antonym">
+                <div class="question-number">Question 5</div>
+                <div class="word-group">
+                    <div class="word-item" onclick="selectWord(this, 'q5')" data-word="puny">puny</div>
+                    <div class="word-item" onclick="selectWord(this, 'q5')" data-word="burly">burly</div>
+                    <div class="word-item" onclick="selectWord(this, 'q5')" data-word="nostalgic">nostalgic</div>
+                    <div class="word-item" onclick="selectWord(this, 'q5')" data-word="grateful">grateful</div>
+                </div>
+                <div class="sa-buttons">
+                    <button class="sa-btn" onclick="selectSA(this, 'q5', 'A')" data-answer="A">A (Antonyms)</button>
+                    <button class="sa-btn" onclick="selectSA(this, 'q5', 'S')" data-answer="S">S (Synonyms)</button>
+                </div>
+                <p><em>Correct pair: puny & burly (opposites)</em></p>
+            </div>
+
+            <div class="synonym-antonym">
+                <div class="question-number">Question 6</div>
+                <div class="word-group">
+                    <div class="word-item" onclick="selectWord(this, 'q6')" data-word="brittle">brittle</div>
+                    <div class="word-item" onclick="selectWord(this, 'q6')" data-word="patient">patient</div>
+                    <div class="word-item" onclick="selectWord(this, 'q6')" data-word="correct">correct</div>
+                    <div class="word-item" onclick="selectWord(this, 'q6')" data-word="accurate">accurate</div>
+                </div>
+                <div class="sa-buttons">
+                    <button class="sa-btn" onclick="selectSA(this, 'q6', 'S')" data-answer="S">S (Synonyms)</button>
+                    <button class="sa-btn" onclick="selectSA(this, 'q6', 'A')" data-answer="A">A (Antonyms)</button>
+                </div>
+                <p><em>Correct pair: correct & accurate (same meaning)</em></p>
+            </div>
+
+            <div class="synonym-antonym">
+                <div class="question-number">Question 7</div>
+                <div class="word-group">
+                    <div class="word-item" onclick="selectWord(this, 'q7')" data-word="navigate">navigate</div>
+                    <div class="word-item" onclick="selectWord(this, 'q7')" data-word="comprehend">comprehend</div>
+                    <div class="word-item" onclick="selectWord(this, 'q7')" data-word="understand">understand</div>
+                    <div class="word-item" onclick="selectWord(this, 'q7')" data-word="arrive">arrive</div>
+                </div>
+                <div class="sa-buttons">
+                    <button class="sa-btn" onclick="selectSA(this, 'q7', 'S')" data-answer="S">S (Synonyms)</button>
+                    <button class="sa-btn" onclick="selectSA(this, 'q7', 'A')" data-answer="A">A (Antonyms)</button>
+                </div>
+                <p><em>Correct pair: comprehend & understand (same meaning)</em></p>
+            </div>
+
+            <div class="synonym-antonym">
+                <div class="question-number">Question 8</div>
+                <div class="word-group">
+                    <div class="word-item" onclick="selectWord(this, 'q8')" data-word="sever">sever</div>
+                    <div class="word-item" onclick="selectWord(this, 'q8')" data-word="preserve">preserve</div>
+                    <div class="word-item" onclick="selectWord(this, 'q8')" data-word="save">save</div>
+                    <div class="word-item" onclick="selectWord(this, 'q8')" data-word="obscure">obscure</div>
+                </div>
+                <div class="sa-buttons">
+                    <button class="sa-btn" onclick="selectSA(this, 'q8', 'S')" data-answer="S">S (Synonyms)</button>
+                    <button class="sa-btn" onclick="selectSA(this, 'q8', 'A')" data-answer="A">A (Antonyms)</button>
+                </div>
+                <p><em>Correct pair: preserve & save (same meaning)</em></p>
+            </div>
+
+            <div class="synonym-antonym">
+                <div class="question-number">Question 9</div>
+                <div class="word-group">
+                    <div class="word-item" onclick="selectWord(this, 'q9')" data-word="separate">separate</div>
+                    <div class="word-item" onclick="selectWord(this, 'q9')" data-word="hold">hold</div>
+                    <div class="word-item" onclick="selectWord(this, 'q9')" data-word="forget">forget</div>
+                    <div class="word-item" onclick="selectWord(this, 'q9')" data-word="combine">combine</div>
+                </div>
+                <div class="sa-buttons">
+                    <button class="sa-btn" onclick="selectSA(this, 'q9', 'A')" data-answer="A">A (Antonyms)</button>
+                    <button class="sa-btn" onclick="selectSA(this, 'q9', 'S')" data-answer="S">S (Synonyms)</button>
+                </div>
+                <p><em>Correct pair: separate & combine (opposites)</em></p>
+            </div>
+
+            <div class="synonym-antonym">
+                <div class="question-number">Question 10</div>
+                <div class="word-group">
+                    <div class="word-item" onclick="selectWord(this, 'q10')" data-word="patience">patience</div>
+                    <div class="word-item" onclick="selectWord(this, 'q10')" data-word="jubilation">jubilation</div>
+                    <div class="word-item" onclick="selectWord(this, 'q10')" data-word="despair">despair</div>
+                    <div class="word-item" onclick="selectWord(this, 'q10')" data-word="duration">duration</div>
+                </div>
+                <div class="sa-buttons">
+                    <button class="sa-btn" onclick="selectSA(this, 'q10', 'A')" data-answer="A">A (Antonyms)</button>
+                    <button class="sa-btn" onclick="selectSA(this, 'q10', 'S')" data-answer="S">S (Synonyms)</button>
+                </div>
+                <p><em>Correct pair: jubilation & despair (opposites)</em></p>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="checkSectionD()">✅ Check My Answers</button>
+                <button class="btn secondary" onclick="showSection('sectionE')">➡️ Next: Section E</button>
+            </div>
+        </div>
+
+        <!-- Section E: Passage -->
+        <div id="sectionE" class="section">
+            <h2>📖 Section E: Passage</h2>
+            
+            <div class="fun-fact-box">
+                <h3>🎯 Instructions</h3>
+                <p>Read the passage. Then answer the questions that follow it. If a question does not contain a vocabulary word from the lesson's word list, use one in your answer. Use each word only once.</p>
+            </div>
+
+            <div class="passage-container">
+                <h3>🚢 A Difficult Journey</h3>
+                <div class="passage-text">
+                    <p>In England in the early seventeenth century, people were not free to worship as they pleased. This was a matter decided for them by the government. Those who did not like it could leave. So it was that on September 6, 1620, a sailing ship called the <em>Mayflower</em> <span class="vocab-highlight">departed</span> from Plymouth, England, with a hundred and two passengers.</p>
+                    
+                    <p>Many of those on board were leaving in order to be free to worship in their own way. Later, they were called Pilgrims. That is the name for people who make long journeys because of a deep religious faith. Others on the ship were simply hoping to make a new life for themselves in America. The passengers, however, did not want to <span class="vocab-highlight">sever</span> all ties with England. They had to pay back the money they had borrowed to make this journey. They intended to do this by trading with the old country.</p>
+                    
+                    <p>The <em>Mayflower's</em> <span class="vocab-highlight">destination</span> was Virginia. Others from England had settled there thirteen years before. But getting there was no simple matter. In those days, when sailors were out of sight of land, they <span class="vocab-highlight">navigated</span> by measuring the position of the sun and stars. When the sun told them it was noon, the clocks on board gave a different time, depending on how far east or west they had traveled. The difference in time was used to calculate their position. But their clocks and other instruments were not very <span class="vocab-highlight">accurate</span>. When clouds obscured the sun or stars, figuring out where they were and in what direction they were headed was not easy.</p>
+                    
+                    <p>For the first couple of weeks of the <em>Mayflower's</em> <span class="vocab-highlight">voyage</span>, gentle breezes carried the ship along; the passengers sat on deck and enjoyed the sunshine. Later on, however, the weather <span class="vocab-highlight">deteriorated</span>. Strong <span class="vocab-highlight">gales</span> rocked the <em>Mayflower</em> and made life miserable for the passengers; many people became sick. One person died and was buried at sea. A woman named Elizabeth Hopkins had a baby in mid-ocean. She named the child Oceanus. Day after day, the Pilgrims stared at the <span class="vocab-highlight">horizon</span>. They were hoping for the sight of land to <span class="vocab-highlight">revive</span> their spirits. Day after day, all they saw was endless sea and sky. Many <span class="vocab-highlight">despaired</span> of ever reaching America. Then at last, after 65 days, they saw land. That day there was great <span class="vocab-highlight">jubilation</span> on board the <em>Mayflower</em>.</p>
+                    
+                    <p>The Pilgrims soon discovered, however, that they had been blown far off their proper <span class="vocab-highlight">course</span> by strong winds in the mid-Atlantic. Instead of landing in Virginia, they found themselves on Cape Cod, <span class="vocab-highlight">approximately</span> five hundred miles to the north. For several weeks they explored the coast of Cape Cod Bay, looking for a place in which to settle. They had little time because the bitterly cold winter weather was almost upon them.</p>
+                    
+                    <p>Finally, in late December, they discovered a suitable spot. The passengers went ashore to plan the new settlement and build houses. The place where they landed had been visited earlier by English explorers. The name the explorers had given it may have made some of the Pilgrims <span class="vocab-highlight">nostalgic</span>. It was called Plymouth.</p>
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 1</div>
+                    <p><strong>What option was open to people in England who wanted to practice their own religion?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="They could leave England">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 2</div>
+                    <p><strong>What is the meaning of <em>sever</em> as it is used in the passage?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="To break off or cut">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 3</div>
+                    <p><strong>How long did it take the <em>Mayflower</em> to get from England to Cape Cod?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="65 days">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 4</div>
+                    <p><strong>Where did those on board the <em>Mayflower</em> intend to land?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="Virginia">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 5</div>
+                    <p><strong>What is the meaning of <em>accurate</em> as it is used in the passage?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="Correct or exact">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 6</div>
+                    <p><strong><em>Approximately</em> how many passengers were there on the <em>Mayflower</em>?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="One hundred and two">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 7</div>
+                    <p><strong>When did the weather start to get worse?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="After the first couple of weeks">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 8</div>
+                    <p><strong>When might it have been dangerous for passengers to go on deck?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="During the strong gales">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 9</div>
+                    <p><strong>Why did many passengers <em>despair</em> of reaching America?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="They saw only endless sea and sky day after day">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 10</div>
+                    <p><strong>What problem would cloudy skies cause for the crew of the <em>Mayflower</em>?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="They couldn't navigate by the sun and stars">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 11</div>
+                    <p><strong>Where did the passengers first see land?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="On the horizon">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 12</div>
+                    <p><strong>What is the meaning of <em>revive</em> as it is used in the passage?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="To bring back to life or restore">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 13</div>
+                    <p><strong>How might the religious Pilgrims have expressed their <em>jubilation</em> at seeing land?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="They might have prayed or given thanks">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 14</div>
+                    <p><strong>Name some of the things that the Pilgrims might have felt <em>nostalgia</em> for.</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="Their homes, families, or friends in England">
+                </div>
+
+                <div class="passage-question">
+                    <div class="question-number">Question 15</div>
+                    <p><strong>What <em>course</em> was open to the Pilgrims when they found themselves on Cape Cod instead of in Virginia?</strong></p>
+                    <input type="text" class="sentence-input" placeholder="Your answer..." data-answer="They could explore the coast and find a place to settle">
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="checkSectionE()">✅ Check My Answers</button>
+                <button class="btn secondary" onclick="showSection('results')">🏆 See My Results!</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="section">
+            <div class="results-container" id="finalResults">
+                <h2>🏆 Congratulations! Test Complete!</h2>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <div class="score-display" id="finalScore">Your Score: 0/53</div>
+                <p id="finalMessage">You've completed your vocabulary adventure!</p>
+                
+                <div style="margin: 30px 0;">
+                    <h3>📊 Section Breakdown:</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 10px;">
+                            <strong>Section A</strong><br>
+                            <span id="scoreA">0/10</span> Finding Meanings
+                        </div>
+                        <div style="background: #f3e5f5; padding: 15px; border-radius: 10px;">
+                            <strong>Section B</strong><br>
+                            <span id="scoreB">0/10</span> Just the Right Word
+                        </div>
+                        <div style="background: #e8f5e8; padding: 15px; border-radius: 10px;">
+                            <strong>Section C</strong><br>
+                            <span id="scoreC">0/8</span> Applying Meanings
+                        </div>
+                        <div style="background: #fff3e0; padding: 15px; border-radius: 10px;">
+                            <strong>Section D</strong><br>
+                            <span id="scoreD">0/10</span> Word Study
+                        </div>
+                        <div style="background: #fce4ec; padding: 15px; border-radius: 10px;">
+                            <strong>Section E</strong><br>
+                            <span id="scoreE">0/15</span> Passage
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="restartTest()">🔄 Try Again</button>
+                <button class="btn secondary" onclick="showSection('intro')">🏠 Back to Start</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'intro';
+        let scores = {
+            sectionA: 0,
+            sectionB: 0,
+            sectionC: 0,
+            sectionD: 0,
+            sectionE: 0
+        };
+        let maxScores = {
+            sectionA: 10,
+            sectionB: 10,
+            sectionC: 8,
+            sectionD: 10,
+            sectionE: 15
+        };
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            currentSection = sectionId;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const totalSections = 5;
+            const completedSections = Object.values(scores).filter(score => score > 0).length;
+            const progress = (completedSections / totalSections) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Progress: ${Math.round(progress)}% Complete`;
+        }
+
+        function checkSectionA() {
+            let score = 0;
+            const inputs = document.querySelectorAll('#sectionA .sentence-input');
+            
+            inputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                
+                if (userAnswer.includes(correctAnswer.split(' ').slice(-3).join(' ')) || 
+                    userAnswer.includes(correctAnswer.split(' ').slice(-4).join(' '))) {
+                    input.style.borderColor = '#28a745';
+                    input.style.backgroundColor = '#d4edda';
+                    score++;
+                } else {
+                    input.style.borderColor = '#dc3545';
+                    input.style.backgroundColor = '#f8d7da';
+                    // Show correct answer
+                    input.placeholder = `Correct: ${input.dataset.answer}`;
+                }
+            });
+            
+            scores.sectionA = score;
+            alert(`Section A Complete! You got ${score} out of ${maxScores.sectionA} correct!`);
+            updateProgress();
+        }
+
+        function checkSectionB() {
+            let score = 0;
+            const inputs = document.querySelectorAll('#sectionB .replacement-input');
+            
+            inputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                
+                if (userAnswer === correctAnswer || userAnswer === correctAnswer + 's' || userAnswer === correctAnswer + 'ed' || userAnswer === correctAnswer + 'ing') {
+                    input.style.borderColor = '#28a745';
+                    input.style.backgroundColor = '#d4edda';
+                    score++;
+                } else {
+                    input.style.borderColor = '#dc3545';
+                    input.style.backgroundColor = '#f8d7da';
+                    input.placeholder = `Correct: ${input.dataset.answer}`;
+                }
+            });
+            
+            scores.sectionB = score;
+            alert(`Section B Complete! You got ${score} out of ${maxScores.sectionB} correct!`);
+            updateProgress();
+        }
+
+        function selectChoice(element, questionId, correctAnswers) {
+            const value = element.dataset.value;
+            element.classList.toggle('selected');
+            
+            // Check if answer is correct after a delay
+            setTimeout(() => {
+                if (correctAnswers.includes(value)) {
+                    element.classList.add('correct');
+                } else {
+                    element.classList.add('incorrect');
+                }
+            }, 500);
+        }
+
+        function checkSectionC() {
+            let score = 0;
+            const questions = document.querySelectorAll('#sectionC .question-container');
+            
+            questions.forEach((question, index) => {
+                const selectedOptions = question.querySelectorAll('.choice-option.selected');
+                const correctOptions = question.querySelectorAll('.choice-option.correct');
+                
+                if (selectedOptions.length === correctOptions.length) {
+                    let allCorrect = true;
+                    selectedOptions.forEach(option => {
+                        if (!option.classList.contains('correct')) {
+                            allCorrect = false;
+                        }
+                    });
+                    if (allCorrect) score++;
+                }
+            });
+            
+            scores.sectionC = score;
+            alert(`Section C Complete! You got ${score} out of ${maxScores.sectionC} correct!`);
+            updateProgress();
+        }
+
+        function selectWord(element, questionId) {
+            // Remove previous selections for this question
+            const questionWords = document.querySelectorAll(`[onclick*="${questionId}"]`);
+            questionWords.forEach(word => {
+                if (word.classList.contains('word-item')) {
+                    word.classList.remove('selected');
+                }
+            });
+            
+            element.classList.add('selected');
+            
+            // Check if we have two words selected
+            const selectedWords = document.querySelectorAll(`#sectionD [onclick*="${questionId}"].word-item.selected`);
+            if (selectedWords.length === 2) {
+                // Auto-select based on the correct pairs
+                const correctPairs = {
+                    'q1': ['deteriorate', 'improve'],
+                    'q2': ['jubilation', 'joy'],
+                    'q3': ['obvious', 'evident'],
+                    'q4': ['depart', 'arrive'],
+                    'q5': ['puny', 'burly'],
+                    'q6': ['correct', 'accurate'],
+                    'q7': ['comprehend', 'understand'],
+                    'q8': ['preserve', 'save'],
+                    'q9': ['separate', 'combine'],
+                    'q10': ['jubilation', 'despair']
+                };
+                
+                const selectedWordTexts = Array.from(selectedWords).map(w => w.dataset.word);
+                const correctPair = correctPairs[questionId];
+                
+                if (selectedWordTexts.sort().join(',') === correctPair.sort().join(',')) {
+                    selectedWords.forEach(word => word.style.backgroundColor = '#d4edda');
+                } else {
+                    selectedWords.forEach(word => word.style.backgroundColor = '#f8d7da');
+                }
+            }
+        }
+
+        function selectSA(element, questionId, answer) {
+            // Remove previous selection
+            const buttons = element.parentElement.querySelectorAll('.sa-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            
+            element.classList.add('selected');
+            
+            // Check if correct
+            const correctAnswers = {
+                'q1': 'A', 'q2': 'S', 'q3': 'S', 'q4': 'A', 'q5': 'A',
+                'q6': 'S', 'q7': 'S', 'q8': 'S', 'q9': 'A', 'q10': 'A'
+            };
+            
+            if (answer === correctAnswers[questionId]) {
+                element.style.backgroundColor = '#28a745';
+            } else {
+                element.style.backgroundColor = '#dc3545';
+            }
+        }
+
+        function checkSectionD() {
+            let score = 0;
+            const questions = document.querySelectorAll('#sectionD .synonym-antonym');
+            
+            questions.forEach((question, index) => {
+                const selectedButton = question.querySelector('.sa-btn.selected');
+                if (selectedButton && selectedButton.style.backgroundColor === 'rgb(40, 167, 69)') {
+                    score++;
+                }
+            });
+            
+            scores.sectionD = score;
+            alert(`Section D Complete! You got ${score} out of ${maxScores.sectionD} correct!`);
+            updateProgress();
+        }
+
+        function checkSectionE() {
+            let score = 0;
+            const inputs = document.querySelectorAll('#sectionE .sentence-input');
+            
+            inputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                
+                // More flexible checking for passage answers
+                if (userAnswer.includes(correctAnswer.split(' ')[0]) || 
+                    correctAnswer.split(' ').some(word => userAnswer.includes(word))) {
+                    input.style.borderColor = '#28a745';
+                    input.style.backgroundColor = '#d4edda';
+                    score++;
+                } else {
+                    input.style.borderColor = '#dc3545';
+                    input.style.backgroundColor = '#f8d7da';
+                    input.placeholder = `Suggested: ${input.dataset.answer}`;
+                }
+            });
+            
+            scores.sectionE = score;
+            alert(`Section E Complete! You got ${score} out of ${maxScores.sectionE} correct!`);
+            updateProgress();
+            showFinalResults();
+        }
+
+        function showFinalResults() {
+            const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+            const totalPossible = Object.values(maxScores).reduce((a, b) => a + b, 0);
+            const percentage = Math.round((totalScore / totalPossible) * 100);
+            
+            document.getElementById('finalScore').textContent = `Your Score: ${totalScore}/${totalPossible} (${percentage}%)`;
+            document.getElementById('scoreA').textContent = `${scores.sectionA}/${maxScores.sectionA}`;
+            document.getElementById('scoreB').textContent = `${scores.sectionB}/${maxScores.sectionB}`;
+            document.getElementById('scoreC').textContent = `${scores.sectionC}/${maxScores.sectionC}`;
+            document.getElementById('scoreD').textContent = `${scores.sectionD}/${maxScores.sectionD}`;
+            document.getElementById('scoreE').textContent = `${scores.sectionE}/${maxScores.sectionE}`;
+            
+            let message = '';
+            if (percentage >= 90) {
+                message = '🌟 Outstanding! You\'re a vocabulary master!';
+            } else if (percentage >= 80) {
+                message = '🎉 Excellent work! You really know your words!';
+            } else if (percentage >= 70) {
+                message = '👍 Good job! Keep practicing those vocabulary words!';
+            } else if (percentage >= 60) {
+                message = '📚 Nice effort! Review the lesson and try again!';
+            } else {
+                message = '🌱 Keep studying! Practice makes perfect!';
+            }
+            
+            document.getElementById('finalMessage').textContent = message;
+            document.getElementById('finalResults').style.display = 'block';
+        }
+
+        function restartTest() {
+            scores = {
+                sectionA: 0,
+                sectionB: 0,
+                sectionC: 0,
+                sectionD: 0,
+                sectionE: 0
+            };
+            
+            // Reset all inputs and selections
+            document.querySelectorAll('input').forEach(input => {
+                input.value = '';
+                input.style.borderColor = '#ddd';
+                input.style.backgroundColor = 'white';
+                input.placeholder = input.placeholder.includes('Correct:') ? 'Your answer...' : input.placeholder;
+            });
+            
+            document.querySelectorAll('.choice-option, .word-item, .sa-btn').forEach(element => {
+                element.classList.remove('selected', 'correct', 'incorrect');
+                element.style.backgroundColor = '';
+            });
+            
+            document.getElementById('finalResults').style.display = 'none';
+            updateProgress();
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
